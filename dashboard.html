@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Barang - Manajemen Inventori Professional</title>
+    <link rel="stylesheet" href="assets/css/style-pro.css">
+</head>
+<body>
+    <div id="dashboardContainer" class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">📦</span>
+                    <span class="logo-text">Politeknik Ganesha</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link" id="menuDashboard">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="menuBarang">
+                            <span class="nav-icon">📦</span>
+                            <span class="nav-text">Daftar Barang</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="menuTambah">
+                            <span class="nav-icon">➕</span>
+                            <span class="nav-text">Tambah Barang</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="menuUserItem" style="display: none;">
+                        <a href="#" class="nav-link" id="menuUser">
+                            <span class="nav-icon">👥</span>
+                            <span class="nav-text">Kelola User</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar">👤</div>
+                    <div class="user-details">
+                        <p class="user-name" id="sidebarUserName">User</p>
+                        <p class="user-role" id="sidebarUserRole">Input</p>
+                    </div>
+                </div>
+                <button class="btn-logout-sidebar" id="logoutBtn">🚪 Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="navbar">
+                <div class="navbar-left">
+                    <button class="navbar-toggle" id="navbarToggle">☰</button>
+                    <h2>📦 Dashboard Barang</h2>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Halo, <strong id="userName">User</strong></span>
+                    <span class="role-badge" id="userRole">Input</span>
+                </div>
+            </div>
+
+            <!-- Alert -->
+            <div id="alert" class="alert"></div>
+
+            <!-- Dashboard Container -->
+            <div class="dashboard-container">
+            <!-- Stats Section (hanya untuk admin) -->
+            <div class="section" id="statsSection" style="display: none;">
+                <h3>📊 Statistik</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h5>Total Barang</h5>
+                        <div class="stat-value" id="statTotalBarang">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h5>Total Stok</h5>
+                        <div class="stat-value" id="statTotalStok">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h5>Total Kategori</h5>
+                        <div class="stat-value" id="statTotalKategori">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section (hanya untuk admin) -->
+            <div class="section" id="userManagementSection" style="display: none;">
+                <h3>👥 Kelola User</h3>
+                
+                <div class="search-filter">
+                    <input type="text" id="searchUserInput" placeholder="Cari user berdasarkan nama, email, atau username...">
+                    <button class="btn-primary" id="addUserBtn">➕ Tambah User Baru</button>
+                </div>
+
+                <!-- User Table -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Terdaftar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <tr>
+                                <td colspan="8" class="loading"><div class="spinner"></div>Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="section" id="formBarangSection">
+                <h3>➕ Tambah / Edit Barang</h3>
+                <form id="barangForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="kode">Kode Barang *</label>
+                            <input type="text" id="kode" name="kode" placeholder="Contoh: BRG001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nama">Nama Barang *</label>
+                            <input type="text" id="nama" name="nama" placeholder="Masukkan nama barang" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="satuan">Satuan *</label>
+                            <input type="text" id="satuan" name="satuan" placeholder="Contoh: Pcs, Box, Kg" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="harga">Harga *</label>
+                            <input type="number" id="harga" name="harga" placeholder="Masukkan harga" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stok">Stok *</label>
+                            <input type="number" id="stok" name="stok" placeholder="Masukkan jumlah stok" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kategori">Kategori</label>
+                            <input type="text" id="kategori" name="kategori" placeholder="Contoh: Elektronik">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deskripsi">Deskripsi</label>
+                        <textarea id="deskripsi" name="deskripsi" placeholder="Masukkan deskripsi barang (opsional)" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">💾 Simpan</button>
+                        <button type="reset" class="btn-secondary">🔄 Reset</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Search & Filter Section -->
+            <div class="section" id="daftarBarangSection">
+                <h3>🔍 Daftar Barang</h3>
+                
+                <div class="search-filter">
+                    <input type="text" id="searchInput" placeholder="Cari berdasarkan kode atau nama barang...">
+                    <select id="filterKategori">
+                        <option value="">Semua Kategori</option>
+                    </select>
+                    <button class="btn-primary" id="addBarangBtn">➕ Tambah Barang Baru</button>
+                </div>
+
+                <!-- Table -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama Barang</th>
+                                <th>Satuan</th>
+                                <th>Harga</th>
+                                <th>Stok</th>
+                                <th>Kategori</th>
+                                <th>Deskripsi</th>
+                                <th>Input Oleh</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="9" class="loading"><div class="spinner"></div>Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add/Edit (Hidden) -->
+    <div id="barangModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Tambah Barang</h4>
+                <button type="button" class="close-btn">&times;</button>
+            </div>
+            <form id="modalBarangForm" style="display: none;"></form>
+            <p style="color: #666; text-align: center; padding: 20px;">
+                Gunakan form di atas untuk menambah atau mengedit data barang.
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal for Add/Edit User -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="userModalTitle">Tambah User</h4>
+                <button type="button" class="close-btn">&times;</button>
+            </div>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userEmail">Email *</label>
+                    <input type="email" id="userEmail" name="email" placeholder="Masukkan email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="userUsername">Username *</label>
+                    <input type="text" id="userUsername" name="username" placeholder="Masukkan username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPassword">Password *</label>
+                    <input type="password" id="userPassword" name="password" placeholder="Masukkan password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="userNamaLengkap">Nama Lengkap *</label>
+                    <input type="text" id="userNamaLengkap" name="nama_lengkap" placeholder="Masukkan nama lengkap" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userRole">Role *</label>
+                        <select id="userRole" name="role" required>
+                            <option value="">Pilih Role</option>
+                            <option value="admin">Admin</option>
+                            <option value="input">Input User</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userStatus">Status *</label>
+                        <select id="userStatus" name="status" required>
+                            <option value="">Pilih Status</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="nonaktif">Nonaktif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">💾 Simpan</button>
+                    <button type="button" class="btn-secondary close-btn">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/animations.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/barang.js"></script>
+    <script src="assets/js/user.js"></script>
+    <script src="assets/js/crud-manager.js"></script>
+    <script src="assets/js/export-import.js"></script>
+
+    <script>
+        /**
+         * Section Router - Menampilkan/Menyembunyikan section berdasarkan menu yang diklik
+         */
+        const showSection = (sectionId) => {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show specific section
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = 'block';
+            }
+        };
+
+        // Show stats for admin only
+        window.addEventListener('load', () => {
+            const user = UserManager.get();
+            if (user && user.role === 'admin') {
+                document.getElementById('statsSection').style.display = 'block';
+                document.getElementById('userManagementSection').style.display = 'none';
+                document.getElementById('menuUserItem').style.display = 'block';
+            }
+            
+            // Show default sections
+            document.getElementById('formBarangSection').style.display = 'block';
+            document.getElementById('daftarBarangSection').style.display = 'block';
+        });
+
+        // Sidebar Toggle
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        });
+
+        document.getElementById('navbarToggle').addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        });
+
+        // Update sidebar user info
+        window.addEventListener('load', () => {
+            const user = UserManager.get();
+            if (user) {
+                document.getElementById('sidebarUserName').textContent = user.nama_lengkap || user.username;
+                document.getElementById('sidebarUserRole').textContent = user.role === 'admin' ? 'Admin' : 'Input User';
+            }
+        });
+
+        // Navigation menu - Dashboard
+        document.getElementById('menuDashboard').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            e.target.closest('.nav-item').classList.add('active');
+            
+            // Hide all sections and show default
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            const user = UserManager.get();
+            if (user && user.role === 'admin') {
+                document.getElementById('statsSection').style.display = 'block';
+            }
+            document.getElementById('formBarangSection').style.display = 'block';
+            document.getElementById('daftarBarangSection').style.display = 'block';
+        });
+
+        // Navigation menu - Daftar Barang
+        document.getElementById('menuBarang').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            e.target.closest('.nav-item').classList.add('active');
+            
+            // Show only daftar barang section
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById('daftarBarangSection').style.display = 'block';
+            
+            // Scroll to search input and focus
+            setTimeout(() => {
+                document.getElementById('searchInput').focus();
+            }, 100);
+        });
+
+        // Navigation menu - Tambah Barang
+        document.getElementById('menuTambah').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            e.target.closest('.nav-item').classList.add('active');
+            
+            // Show only form section
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById('formBarangSection').style.display = 'block';
+            
+            // Reset form and scroll to it
+            document.getElementById('barangForm').reset();
+            setTimeout(() => {
+                document.getElementById('barangForm').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        });
+
+        // Menu User (untuk admin)
+        const menuUserItem = document.getElementById('menuUserItem');
+        if (menuUserItem) {
+            document.getElementById('menuUser').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                e.target.closest('.nav-item').classList.add('active');
+                
+                // Show only user management section
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.getElementById('userManagementSection').style.display = 'block';
+                
+                // Load user list
+                loadUserList();
+            });
+        }
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                Auth.logout();
+            }
+        });
+    </script>
+</body>
+</html>

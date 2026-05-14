@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Barang</title>
+</head>
+<body>
+    <script>
+        // Redirect ke login atau dashboard sesuai kondisi
+        if (localStorage.getItem('auth_token')) {
+            window.location.href = 'dashboard.html';
+        } else {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <p>Redirecting...</p>
+</body>
+</html>
