@@ -38,6 +38,12 @@
                             <span class="nav-text">Tambah Barang</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="menuCustomer">
+                            <span class="nav-icon">🧾</span>
+                            <span class="nav-text">Customers</span>
+                        </a>
+                    </li>
                     <li class="nav-item" id="menuUserItem" style="display: none;">
                         <a href="#" class="nav-link" id="menuUser">
                             <span class="nav-icon">👥</span>
@@ -52,6 +58,9 @@
                     <div class="user-avatar">👤</div>
                     <div class="user-details">
                         <p class="user-name" id="sidebarUserName">User</p>
+
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/customer.js"></script>
                         <p class="user-role" id="sidebarUserRole">Input</p>
                     </div>
                 </div>
@@ -212,6 +221,35 @@
                     </table>
                 </div>
             </div>
+            
+                        <!-- Customers Section (loaded inline) -->
+                        <div class="section" id="customersSection" style="display:none;">
+                                <h3>🧾 Customers</h3>
+
+                                <div style="margin-bottom:12px; display:flex; gap:8px; align-items:center;">
+                                    <button id="btnAddCustomer" class="btn">Tambah Customer</button>
+                                    <input id="searchCustomerInput" placeholder="Cari kode/nama/email/telepon..." style="flex:1;padding:6px;border:1px solid #ccc;border-radius:4px;">
+                                    <button id="btnSearchCustomer" class="btn">Cari</button>
+                                </div>
+
+                                <div class="table-wrapper">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Kode</th>
+                                                <th>Nama</th>
+                                                <th>Alamat</th>
+                                                <th>Telepon</th>
+                                                <th>Email</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="customersTableBody">
+                                            <tr><td colspan="6">Loading...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
         </div>
         </div>
     </div>

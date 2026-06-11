@@ -44,3 +44,21 @@ ON DUPLICATE KEY UPDATE username=username;
 
 -- Catatan: Password 'admin123' sudah di-hash menggunakan password_hash()
 -- Untuk membuat hash baru, gunakan PHP: password_hash('admin123', PASSWORD_BCRYPT)
+
+-- Tabel Customers
+CREATE TABLE IF NOT EXISTS customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    kode VARCHAR(50) UNIQUE NOT NULL,
+    nama VARCHAR(150) NOT NULL,
+    alamat TEXT,
+    telepon VARCHAR(50),
+    email VARCHAR(150),
+    created_by INT NOT NULL,
+    updated_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (updated_by) REFERENCES users(id),
+    INDEX idx_kode_customers (kode),
+    INDEX idx_created_by_customers (created_by)
+);
